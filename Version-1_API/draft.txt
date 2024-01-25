@@ -1,0 +1,25 @@
+Authentication
+- Starting ground for the desktop C2 client
+- A database storing only email address and password
+- Authentication looksup credentials and sends a code to the address upon success
+
+
+The payload pepotrates as premium edition setup of a popular software (lands on the user's computer from emailing campaign) to insite the 
+user to run it.
+
+Exfiltration Module
+
+- Upon running the malware searches for files of a specific extension in specific folders, and even with contents of specific keywords, ie. password. 
+Extensions for data: PDF, TXT, DOCX, XLSX, XLS
+Extensions for info:  JSON, MANIFEST,
+- The files are sent to the API, which stores them under a unique folder
+
+
+Scripting Module
+- A module, perhaps part of the payload, allows pushing scripts to the payload to have it run them and return the result. Scripts such as 
+mimikats or custom information stealer.
+
+Command Module
+- Creates a reverse shell for command execution.
+
+The payload will make use of original version 1 modules, namely MediaWriter and Copy, to distribute the payload through external storage media on infected hosts.
