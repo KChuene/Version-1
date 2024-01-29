@@ -25,7 +25,7 @@ class TargetsFrame(ctk.CTkScrollableFrame):
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
 
-class Application:
+class AdminPanel:
 
     def __init__(self):
         ctk.set_appearance_mode("dark")
@@ -33,7 +33,8 @@ class Application:
 
         self.window = ctk.CTk()
         self.window.title("Version 1 - Command and Control")
-        self.window.geometry("600x300")
+        self.window.geometry("600x400")
+        self.window.eval("tk::PlaceWindow . Center")
         self.window.resizable(False, False)
         self.window.config(bg="#292b2f")
 
@@ -93,10 +94,6 @@ class Application:
             {'targetid':'AdhwASCVEwadaw', 'user':'kali'},
             {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
             {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
-            {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
-            {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
-            {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
-            {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'},
             {'targetid': 'AawDaWDsdsefse', 'user': 'pk111'}
         ]
 
@@ -116,5 +113,5 @@ class Application:
     def visit_credits(self, url):
         webbrowser.open(url)
 
-Application()
+AdminPanel()
 
