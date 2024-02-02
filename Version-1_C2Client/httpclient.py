@@ -32,7 +32,10 @@ class HttpClient():
                 response = httpResponse.json()
                 
                 success = ApiExecCode(response["code"]) == ApiExecCode.Success
-                return success, response["data"]
+                if success:
+                    return success, response["data"]
+                else:
+                    return success, response["message"]
                 
             else:
                 print(f"Authentication failed with status {httpResponse.status_code}.")
