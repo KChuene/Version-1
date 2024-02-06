@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import httpclient
-import c2_gui as c2
+import admin_panel as c2
 import hashlib
 
 from tkinter import messagebox

@@ -1,5 +1,5 @@
-import login_gui
-import c2_gui
+import login_form
+import admin_panel
 
 class Application():
     def __init__(self):

