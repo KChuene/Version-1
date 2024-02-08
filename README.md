@@ -3,7 +3,7 @@ An experimental, in-development, malicious software with RCE, and Data Exfiltrat
 
 It relies on the an ideal process of infection:
 1. Send specially crafted SE emails, with link to malicious site, using a dictionary of addresses.
-2. If recipients visit the linked page, the payload is smuggled within imbedded JScript and saved onto the recipients machine.
+2. If recipients visit the linked page, the recipient may proceed to download the malicious software (the payload) under the guise of a promotional video editor.
 3. If recipients execute the payload, the payload starts up 3 modules that will help in controlling the recipient machine and further spreading the payload.
 
 ## Applications
