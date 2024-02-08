@@ -77,7 +77,7 @@ class Login:
         authenticated, message = api_client.api_authenticate(email, password)
 
         if not authenticated:
-            messagebox.showinfo("Auth. Failure", message or "Authentication failed.")
+            messagebox.showerror("Auth. Failure", message or "Authentication failed.")
         else:
             self.window.destroy()
 

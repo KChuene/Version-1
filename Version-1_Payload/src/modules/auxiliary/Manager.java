@@ -270,7 +270,6 @@ public class Manager {
             }
         }
 
-        System.out.println("[*] Payload fetched.");
         return PAYLOAD_DIR.concat(payload_filename);
     }
 

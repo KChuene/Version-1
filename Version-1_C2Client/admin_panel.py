@@ -133,8 +133,10 @@ class AdminPanel:
                                                        variable=self.default_terminal)
         self.default_terminal_menu.grid(row=2, column=0)
 
-        self.shell_btn = ctk.CTkButton(self.core_actions_frame, text=f"Run", command=self.start_shell)
-        self.shell_btn.grid(row=2, column=1, padx=5, pady=5)
+        self.play_icon = ImageTk.PhotoImage((Image.open("images/play-icon.png")).resize((16, 16)))
+        self.shell_btn = ctk.CTkButton(self.core_actions_frame, text="Run", command=self.start_shell, image=self.play_icon,
+                                       width=24, height=24, fg_color="transparent")
+        self.shell_btn.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
         self.helper_actions_frame = HelperActionsFrame(self.actions_frame)
         self.helper_actions_frame.grid(row=2, column=0, pady=20)
@@ -167,11 +169,11 @@ class AdminPanel:
             for target in targets:
                 match self.default_terminal.get():
                     case "cmd":
-                        shell = threading.Thread(target=lambda: os.system(f"start cmd /c python shell.py -api {self.api_url} -session {self.session_token} -target {target}"))
+                        shell = threading.Thread(target=lambda: os.system(f"start cmd /c python shell.py -api {self.api_url} -sess-token {self.session_token} -target {target}"))
                         shell.start()
 
                     case "qterminal":
-                        shell = threading.Thread(target=lambda: os.system(f"start cmd /c python shell.py -api {self.api_url} -session {self.session_token} -target {target}"))
+                        shell = threading.Thread(target=lambda: os.system(f"qterminal -e python shell.py -api {self.api_url} -sess-token {self.session_token} -target {target}"))
                         shell.start()
 
                     case _:
@@ -210,9 +212,11 @@ class AdminPanel:
         cmd = "start" if do_start else "stop"
 
         targets = self.fetch_selected_targets()
+        if not targets:
+            messagebox.showinfo("No targets.", "No targets selected.")
+            
         threads = []
         threads_count = 0
-        print("Toggling stop ", module_name)
         for target in targets:
             match module_name:
                 case "MediaWriter":
