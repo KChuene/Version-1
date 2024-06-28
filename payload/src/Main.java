@@ -2,8 +2,6 @@ import modules.auxiliary.Endpoint;
 import modules.auxiliary.Manager;
 import modules.auxiliary.ModuleConfig;
 import modules.core.CmdInterpreter;
-import modules.core.Exfiltrator;
-import modules.auxiliary.Shell;
 import modules.core.MediaWriter;
 
 import java.util.Scanner;

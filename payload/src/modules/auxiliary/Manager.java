@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import modules.core.Exfiltrator;
+
 import modules.core.MediaWriter;
 import modules.file.CopyFileHandler;
 import modules.net.CopyHttpClient;
@@ -164,20 +164,6 @@ public class Manager {
         Gson gson = builder.create();
 
         return gson.toJson(result);
-    }
-
-    /**
-        Convert a provided FileSubmission object to a corresponding JSON string.
-
-        @param submission FileSubmission object to convert.
-        @return A JSON format string.
-     */
-    public String fileSubmissionToJSON(FileSubmission submission) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(FileSubmission.class, new FileSubmissionAdapter());
-        Gson gson = builder.create();
-
-        return gson.toJson(submission);
     }
 
     /**
@@ -327,7 +313,6 @@ public class Manager {
      */
     public void shutdown() {
         // shutdown sub threads
-        Exfiltrator.shutdown();
         MediaWriter.shutdown();
 
         // shutdown main thread initiator
