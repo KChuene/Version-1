@@ -10,7 +10,7 @@ import java.net.URI;
 */
 public class Endpoint {
 
-    private static final String baseURL = "http://api.version1.local";
+    private static final String baseURL = "http://localhost:5000/api";
 
     public static URI payload() {
         return URI.create(

@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pk111\\Downloads\\Sources\\Version-1-main\\Version-1_API\\Version-1_API\\Version-1_API.csproj": {}
+    "C:\\Github\\Version-1\\api\\Version-1_API\\Version-1_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pk111\\Downloads\\Sources\\Version-1-main\\Version-1_API\\Version-1_API\\Version-1_API.csproj": {
+    "C:\\Github\\Version-1\\api\\Version-1_API\\Version-1_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pk111\\Downloads\\Sources\\Version-1-main\\Version-1_API\\Version-1_API\\Version-1_API.csproj",
+        "projectUniqueName": "C:\\Github\\Version-1\\api\\Version-1_API\\Version-1_API.csproj",
         "projectName": "Version-1_API",
-        "projectPath": "C:\\Users\\pk111\\Downloads\\Sources\\Version-1-main\\Version-1_API\\Version-1_API\\Version-1_API.csproj",
+        "projectPath": "C:\\Github\\Version-1\\api\\Version-1_API\\Version-1_API.csproj",
         "packagesPath": "C:\\Users\\pk111\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pk111\\Downloads\\Sources\\Version-1-main\\Version-1_API\\Version-1_API\\obj\\",
+        "outputPath": "C:\\Github\\Version-1\\api\\Version-1_API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\pk111\\AppData\\Roaming\\NuGet\\NuGet.Config",
