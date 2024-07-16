@@ -286,3 +286,6 @@ C:\Github\Version-1\api\Version-1_API\obj\Debug\net6.0\scopedcss\bundle\Version-
 C:\Github\Version-1\api\Version-1_API\obj\Debug\net6.0\Version-1_API.csproj.CopyComplete
 C:\Github\Version-1\api\Version-1_API\obj\Debug\net6.0\Version-1_API.genruntimeconfig.cache
 C:\Github\Version-1\api\Version-1_API\obj\Debug\net6.0\ref\Version-1_API.dll
+C:\Github\Version-1\api\Version-1_API\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Github\Version-1\api\Version-1_API\bin\Debug\net6.0\MySqlConnector.dll
+C:\Github\Version-1\api\Version-1_API\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll

@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.ObjectPool;
+﻿using Microsoft.Extensions.ObjectPool;
 using Microsoft.IdentityModel.Tokens;
+using MySqlConnector;
 using System.Data;
 
 namespace Version_1_API.Auxiliary
@@ -8,12 +8,20 @@ namespace Version_1_API.Auxiliary
     public class SqlHelper
     {
         private static SqlHelper _instance;
-        private SqlConnection _connection;
-        private String _connectionString =
-            "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Accounts;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+        private MySqlConnection _connection;
+
+        private MySqlConnectionStringBuilder _connStringBuilder = (new MySqlConnectionStringBuilder
+        {
+            Server = "localhost",
+            UserID = "version1.admin",
+            Password = "V3rs!0n1.Adm!#",
+            Database = "version1"
+        });
+       
+        //"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Accounts;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
         private SqlHelper() {
-            _connection = new SqlConnection(_connectionString);
+            _connection = new MySqlConnection(_connStringBuilder.ConnectionString);
             _connection.Open();
         }
 
@@ -28,8 +36,8 @@ namespace Version_1_API.Auxiliary
 
         public int Insert(string sql, string[] parameters, params object[] values)
         {
-            SqlCommand cmd = new SqlCommand(sql, _connection);
-            SqlTransaction transaction = null;
+            MySqlCommand cmd = new MySqlCommand(sql, _connection);
+            MySqlTransaction transaction = null;
 
             try
             {
@@ -47,7 +55,7 @@ namespace Version_1_API.Auxiliary
 
                 return changes;
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 RollBack(transaction);
                 throw ex;
@@ -67,16 +75,16 @@ namespace Version_1_API.Auxiliary
             }
         }
 
-        public SqlDataReader Select(string sql, string[] parameters, params object[] values)
+        public MySqlDataReader Select(string sql, string[] parameters, params object[] values)
         {
-            SqlCommand cmd = new SqlCommand(sql, _connection);
+            MySqlCommand cmd = new MySqlCommand(sql, _connection);
 
             try
             {
                 SetParameters(cmd, parameters, values);
 
                 OpenConnection();
-                SqlDataReader reader = cmd.ExecuteReader();
+                MySqlDataReader reader = cmd.ExecuteReader();
                 
                 return reader;
             }
@@ -87,7 +95,7 @@ namespace Version_1_API.Auxiliary
 
         }
 
-        private void RollBack(SqlTransaction transation)
+        private void RollBack(MySqlTransaction transation)
         {
             try
             {
@@ -99,7 +107,7 @@ namespace Version_1_API.Auxiliary
             catch(Exception) { /*pass*/ }
         }
 
-        private void SetParameters(SqlCommand cmd, string[] parameters, object[] values)
+        private void SetParameters(MySqlCommand cmd, string[] parameters, object[] values)
         {
             if(parameters.Length != values.Length)
             {
@@ -133,7 +141,7 @@ namespace Version_1_API.Auxiliary
                     _connection.Close();
                 }
             }
-            catch(SqlException) { /*pass*/ } 
+            catch(MySqlException) { /*pass*/ } 
         }
     }
 }

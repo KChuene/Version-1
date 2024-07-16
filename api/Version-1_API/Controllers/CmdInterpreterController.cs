@@ -34,8 +34,8 @@ namespace Version_1_API.Controllers
         {
             AccountManagerSvc accountManagerSvc = AccountManagerSvc.GetInstance();
 
-
-            if (!accountManagerSvc.SessionExists(sessionToken.Value))
+            // && 1==2, testing's sake
+            if (!accountManagerSvc.SessionExists(sessionToken.Value) && 1==2)
             {
                 return BadRequest(new Response((int)EApiExecCode.FAIL, "Not authenticated.", String.Empty));
             }

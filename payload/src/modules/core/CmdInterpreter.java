@@ -96,16 +96,16 @@ public class CmdInterpreter {
         switch (moduleName.toLowerCase()) {
             case "mediawriter" -> {
                 if(MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] MediaWriter is already stopped.");
+                    shellHttpClient.sendCmdResult("MediaWriter is already stopped.");
                     return;
                 }
 
                 MediaWriter.shutdown();
                 if(MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] Mediawriter stopped.");
+                    shellHttpClient.sendCmdResult("Mediawriter stopped.");
                 }
                 else {
-                    shellHttpClient.sendCmdResult("[*] Failed to stop Mediawriter. Try again.");
+                    shellHttpClient.sendCmdResult("Failed to stop Mediawriter. Try again.");
                 }
             }
         }
@@ -122,7 +122,7 @@ public class CmdInterpreter {
         switch (moduleName.toLowerCase()) {
             case "mediawriter" -> {
                 if(!MediaWriter.isStopped()) {
-                    shellHttpClient.sendCmdResult("[*] MediaWriter is already running.");
+                    shellHttpClient.sendCmdResult("MediaWriter is already running.");
                     return;
                 }
 
@@ -134,7 +134,7 @@ public class CmdInterpreter {
                 MediaWriter mediaWriter = MediaWriter.getInstance(config);
                 manager.executeThread(mediaWriter);
 
-                shellHttpClient.sendCmdResult("[*] Mediawriter started.");
+                shellHttpClient.sendCmdResult("Mediawriter started.");
             }
         }
     }
@@ -148,7 +148,7 @@ public class CmdInterpreter {
             Returns true if the command passes all command specific checks, returns false if any checks fail.
      */
     private boolean cmdValid(String cmdString) {
-        String[] modules = {"mediawriter", "exfiltrator"};
+        String[] modules = {"mediawriter"};
 
         StringTokenizer cmdTokens = new StringTokenizer(cmdString, " ");
         String command = cmdTokens.nextToken();
@@ -157,14 +157,18 @@ public class CmdInterpreter {
                 // module name specified and is valid module name
                 return cmdTokens.hasMoreTokens() && isIn(cmdTokens.nextToken(), modules);
             }
-            case "download" -> {
-                return cmdTokens.hasMoreTokens();
-            }
         }
 
         return false;
     }
 
+    /**
+     Search for a string from a given list.
+     @param search The string to search for.
+     @param list The list of strings to search through.
+
+     @return Returns true if found, otherwise false.
+    */
     private boolean isIn(String search, String[] list) {
         for(String item : list) {
             if(item.equalsIgnoreCase(search)) {

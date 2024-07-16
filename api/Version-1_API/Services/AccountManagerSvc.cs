@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
-using Microsoft.Data.SqlClient;
-using System.Diagnostics.SymbolStore;
+﻿using MySqlConnector;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
@@ -30,19 +28,19 @@ namespace Version_1_API.Services
             return _instance;
         }
 
-        public Response AuthenticateAddress(string address, string password)
+        public Response AuthenticateAddress(string username, string password)
         {
             string query =
-                "SELECT Id FROM Credentials WHERE Address=@address AND PassHash=@password;";
+                "SELECT id FROM user WHERE username=@username AND password=@password;";
 
             try
             {
                 string[] parameters = new string[] {
-                    nameof(address),
+                    nameof(username),
                     nameof(password)
                 };
 
-                SqlDataReader reader = _sqlHelper.Select(query, parameters, address, password);
+                MySqlDataReader reader = _sqlHelper.Select(query, parameters, username, password);
                 if (reader.HasRows)
                 {
                     string token = CreateCode(16);

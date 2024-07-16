@@ -83,6 +83,3 @@ class Login:
 
             session_token = message
             c2.AdminPanel(session_token, api_url)
-
-
-Login()
