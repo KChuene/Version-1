@@ -360,8 +360,7 @@ public class Manager {
             catch(Exception ex) { // IO/Interrupted exceptions
 
                 try {
-                    System.out.println("[Error] Failed to get connection id.");
-                    ex.printStackTrace();
+                    System.out.println("[!] Failed to get connection id.");
                     Thread.sleep(Duration.ofSeconds(2)); // wait before next attempt
                 }
                 catch(InterruptedException interruptEx) { /*pass*/ }

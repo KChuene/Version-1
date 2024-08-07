@@ -89,7 +89,7 @@ public class ShellHttpClient {
             catch(Exception ex) {// Expecting IO and Interrupted exceptions
 
                 try {
-                    ex.printStackTrace();
+                    System.err.println("[!] Cmd request failed. Reattempting..");
                     Thread.sleep(Duration.ofSeconds(2));
                 }
                 catch (InterruptedException interruptEx) { /*forces  next iteration without wait*/ }

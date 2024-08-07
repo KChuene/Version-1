@@ -47,7 +47,7 @@ namespace Version_1_API.Controllers
         [HttpPost("submit")]
         public ObjectResult SubmitCmd(Command command)
         {
-            if(command.targetId.IsNullOrEmpty() || command.cmdString.IsNullOrEmpty())
+            if (command.targetId.IsNullOrEmpty() || command.cmdString.IsNullOrEmpty())
             {
                 return BadRequest(new CmdResult(command.targetId, "Invalid command."));
             }
@@ -58,14 +58,15 @@ namespace Version_1_API.Controllers
                 return BadRequest(new CmdResult(command.targetId, "Not authenticated."));
             }
 
-            return Ok(_cmdInterpreterSvc.SubmitCmd(command));
+            CmdResult result = _cmdInterpreterSvc.SubmitCmd(command);
+            return Ok(result);
         }
 
         // Request command
         [HttpPost("request")]
         public ObjectResult RequestCmd(RequestParameter clientId)
         {
-            if(clientId == null || clientId.Value.IsNullOrEmpty())
+            if (clientId == null || clientId.Value.IsNullOrEmpty())
             {
                 return Ok(new Command()
                 {

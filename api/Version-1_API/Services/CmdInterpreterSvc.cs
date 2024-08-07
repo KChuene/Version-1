@@ -90,6 +90,7 @@ namespace Version_1_API.Services
 
             while(!requester.CanRequest())
             {
+                continue;
                 // busy wait
             }
 
@@ -106,10 +107,21 @@ namespace Version_1_API.Services
             if(submitted)
             {
                 provider.Subscribe(command.targetId, resultRequester);
-                while (!resultRequester.CanGetResult())
-                {
-                    // busy wait
+
+                string icon = "[|]";
+                while (!resultRequester.CanGetResult()) {
+                    switch (icon)
+                    {
+                        case "[|]": { icon = "[/]"; break; }
+                        case "[/]": { icon = "[-]"; break; }
+                        case "[-]": { icon = "[\\]"; break; }
+                        case "[\\]": { icon = "[|]"; break; }
+                    }
+                    Console.Write($"\r{icon} Waiting for command result.");
+                    // busy wait - the block must not be empty, I think build for release will exclude code block if empty
                 }
+                icon = "[+]";
+                Console.Write($"\r{icon} Waiting for command result.");
 
                 return resultRequester.GetResult(command.targetId);
             }

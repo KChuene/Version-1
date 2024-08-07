@@ -8,7 +8,9 @@ namespace Version_1_API.Auxiliary.ObserverPattern
         
 
         public bool CanGetResult() { return _canGetResult; }
-        public void SetCanGetResult() { _canGetResult = true; }
+        public void SetCanGetResult() {
+            _canGetResult = true; 
+        }
 
         public CmdResult GetResult(string id)
         {

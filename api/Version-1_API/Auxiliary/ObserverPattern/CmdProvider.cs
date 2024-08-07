@@ -37,7 +37,7 @@ namespace Version_1_API.Auxiliary.ObserverPattern
                 return;
             }
 
-            // a new cmd request starts a new sequence if command exection, so we cleanup after a past sequence
+            // a new cmd request starts a new sequence of command execution, so we cleanup after a past sequence
             Synchronize(id);
 
             if (!_cmdRequesters.ContainsKey(id))
@@ -179,9 +179,22 @@ namespace Version_1_API.Auxiliary.ObserverPattern
 
         private void NotifyResultRequester(string id)
         {
-            if( !string.IsNullOrEmpty(id) && _resultRequesters.ContainsKey(id))
+            if ( !string.IsNullOrEmpty(id) && _resultRequesters.ContainsKey(id))
             {
+                
                 _resultRequesters[id].SetCanGetResult();
+                return;
+            }
+        }
+
+        public void displayRequesterIds()
+        {
+            if(_resultRequesters == null) { return; }
+
+            Console.WriteLine("[i] Current CmdResult requests:");
+            foreach(string id in _resultRequesters.Keys)
+            {
+                Console.WriteLine($"RID: {id}");
             }
         }
 

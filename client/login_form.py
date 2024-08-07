@@ -46,16 +46,16 @@ class Login:
         self.api_url_lbl = ctk.CTkLabel(self.form_frame, text="API Url")
         self.api_url_lbl.grid(row=0, column=0, padx=10, pady=(10, 5))
         self.api_url_txt = ctk.CTkEntry(self.form_frame, width=175, height=35,
-                                        placeholder_text="http://api.version1.local")
+                                        placeholder_text="http://localhost:5000/api")
         self.api_url_txt.grid(row=0, column=1, padx=10, pady=(10, 5))
-        self.email_lbl = ctk.CTkLabel(self.form_frame, text="Email")
+        self.email_lbl = ctk.CTkLabel(self.form_frame, text="Username")
         self.email_lbl.grid(row=1, column=0, padx=10, pady=(5, 5))
-        self.email_txt = ctk.CTkEntry(self.form_frame, width=175, height=35, placeholder_text="version1@gmail.com")
+        self.email_txt = ctk.CTkEntry(self.form_frame, width=175, height=35, placeholder_text="admin")
         self.email_txt.grid(row=1, column=1, padx=10, pady=(5, 5))
         self.password_lbl = ctk.CTkLabel(self.form_frame, text="Password")
         self.password_lbl.grid(row=2, column=0, padx=10, pady=(5, 10))
         self.password_txt = ctk.CTkEntry(self.form_frame, show="*", width=175, height=35,
-                                         placeholder_text="V3rS!0nOne_On1y")
+                                         placeholder_text="admin")
         self.password_txt.grid(row=2, column=1, padx=10, pady=(5, 10))
         self.login_btn = ctk.CTkButton(self.form_frame, text="Login", command=self.login)
         self.login_btn.grid(row=3, column=0, columnspan=2, pady=(0, 10))
@@ -65,9 +65,9 @@ class Login:
         self.window.mainloop()
 
     def login(self):
-        api_url = self.api_url_txt.get().strip() or "http://api.version1.local"
-        email = self.email_txt.get().strip() or "version1@gmail.com"
-        password = hashlib.sha256( bytes(self.password_txt.get().strip() or "V3rS!0nOne_On1y", "utf-8") ).hexdigest()
+        api_url = self.api_url_txt.get().strip() or "http://localhost:5000/api"
+        email = self.email_txt.get().strip() or "admin"
+        password = hashlib.sha256( bytes(self.password_txt.get().strip() or "admin", "utf-8") ).hexdigest()
 
         if not (api_url and email and password):
             messagebox.showerror("Incomplete", "Please complete all fields.")
