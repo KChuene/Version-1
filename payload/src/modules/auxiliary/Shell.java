@@ -4,6 +4,7 @@ import modules.net.ShellHttpClient;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -214,15 +215,22 @@ public class Shell {
             if (dir.exists()) {
                 File[] listing = dir.listFiles();
                 if(listing != null) {
+                    concatList.append(String.format("\n\tDirectory: %s \n\n", dir.getAbsolutePath()));
+                    concatList.append("Mode\t LastModified\t\t Name\n");
+                    concatList.append("-----\t -------------\t\t -----\n");
                     for (File entry : listing) {
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String modified = sdf.format(entry.lastModified());
                         concatList.append(
                                 String.format(
-                                        "%s%s%s%s\t %s\t %d\t %s\n",
+                                        "%s%s%s%s%s\t %s\t %s\n",
                                         (entry.isDirectory() ? "d" : "-"),
+                                        (entry.isHidden()? "h": "-"),
                                         (entry.canRead() ? "r" : "-"),
                                         (entry.canWrite() ? "w" : "-"),
                                         (entry.canExecute() ? "e" : "-"),
-                                        entry.lastModified(),
+                                        modified,
                                         entry.getName()
                                 )
                         );
