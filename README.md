@@ -1,5 +1,5 @@
 # Version-1 Malware
-An experimental, in-development, malicious software with RCE, and Data Exfiltration capabilities as a core.
+An experimental, in-development, malicious software with RCE, and Media writing capabilities as a core.
 
 ## Applications
 1. <b> API </b> - Awaits connections from the C2 Client and the Payload, managing remote command execution by receiving commands from C2 Client and passing on to Payload, and receiving command results from Payload and passing them onto C2 Client. Also receives and saves exfiltrated data.
